@@ -2,7 +2,7 @@ select
 	p.PRODUCT_ID ,
 	p.INTERNAL_NAME,
 	sum(oi.QUANTITY),
-	sum(oi.UNIT_PRICE),
+	sum(oi.UNIT_PRICE * oi.QUANTITY) AS TOTAL REVENUE,
 	pa.CITY ,
 	pa.STATE_PROVINCE_GEO_ID
 from
@@ -42,4 +42,25 @@ having
 	where
 		city_sales.CITY = pa.CITY
 )
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+
+SELECT p.PRODUCT_ID, 
+       p.INTERNAL_NAME, 
+       SUM(oi.QUANTITY) AS total_quantity, 
+       SUM(oi.UNIT_PRICE * oi.QUANTITY) AS TOTAL REVENUEe, 
+       pa.CITY, 
+       pa.STATE_PROVINCE_GEO_ID
+FROM order_item oi 
+JOIN order_contact_mech ocm ON ocm.ORDER_ID = oi.ORDER_ID and OCM.CONTACT_MECH_PURPOSE_TYPE_ID like '%LOCATION'
+JOIN postal_address pa ON pa.CONTACT_MECH_ID = ocm.CONTACT_MECH_ID 
+                       AND pa.STATE_PROVINCE_GEO_ID = 'NY'
+JOIN product p ON p.PRODUCT_ID = oi.PRODUCT_ID
+WHERE pa.CITY = 'New York' 
+GROUP BY p.PRODUCT_ID, p.INTERNAL_NAME, pa.CITY, pa.STATE_PROVINCE_GEO_ID
+ORDER BY total_quantity DESC
+
 
