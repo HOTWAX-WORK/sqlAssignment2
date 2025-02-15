@@ -1,45 +1,29 @@
 select
-	p.PRODUCT_ID ,
-	p.INTERNAL_NAME,
-	sum(oi.QUANTITY),
-	sum(oi.UNIT_PRICE),
+	oh.ORDER_ID ,
+	coalesce(pG.PARTY_ID, p.PARTY_ID) as PARTY_ID,
+	coalesce(pg.GROUP_NAME, p.FIRST_NAME) as CUSTOMER_NAME_FIRST_NAME,
+	p.LAST_NAME,
+	pa.ADDRESS1 as STREET_ADDRESS,
 	pa.CITY ,
-	pa.STATE_PROVINCE_GEO_ID
+	pa.STATE_PROVINCE_GEO_ID as STATE_PROVINCE,
+	pa.POSTAL_CODE ,
+	pa.COUNTRY_GEO_ID as COUNTRY_CODE,
+	oh.STATUS_ID as ORDER_STATUS,
+	oh.ORDER_DATE
 from
-	order_item oi
+	order_header oh
+join order_role or2 on
+	oh.ORDER_ID = or2.ORDER_ID
+	and or2.ROLE_TYPE_ID = 'BILL_TO_CUSTOMER'
+	and oh.STATUS_ID != 'ORDER_CANCELLED'
+left join party_group pg on
+	or2.PARTY_ID = pg.PARTY_ID
+left join person p on
+	p.PARTY_ID = or2.PARTY_ID
 join order_contact_mech ocm on
-	ocm.ORDER_ID = oi.ORDER_ID and OCM.CONTACT_MECH_PURPOSE_TYPE_ID like '%LOCATION'
-join postal_address pa on
+	ocm.ORDER_ID = oh.ORDER_ID
+	and ocm.CONTACT_MECH_PURPOSE_TYPE_ID = 'SHIPPING_LOCATION'
+left join postal_address pa on
 	pa.CONTACT_MECH_ID = ocm.CONTACT_MECH_ID
-	and pa.STATE_PROVINCE_GEO_ID = 'NY'
-join product p on
-	p.PRODUCT_ID = oi.PRODUCT_ID
-group by
-	p.PRODUCT_ID,
-	pa.city,
-	pa.STATE_PROVINCE_GEO_ID
-having
-	SUM(oi.QUANTITY) = (
-	select
-		MAX(total_quantity)
-	from
-		(
-		select
-			SUM(oi2.QUANTITY) as total_quantity,
-			pa2.CITY
-		from
-			order_item oi2
-		join order_contact_mech ocm2 on
-			ocm2.ORDER_ID = oi2.ORDER_ID
-		join postal_address pa2 on
-			pa2.CONTACT_MECH_ID = ocm2.CONTACT_MECH_ID
-		where
-			pa2.STATE_PROVINCE_GEO_ID = 'NY'
-		group by
-			pa2.CITY,
-			oi2.PRODUCT_ID
-    ) as city_sales
-	where
-		city_sales.CITY = pa.CITY
-)
-
+where
+	oh.ORDER_DATE between '2023-10-01' and '2023-10-31'
