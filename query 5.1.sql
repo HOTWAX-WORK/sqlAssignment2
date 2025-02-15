@@ -9,3 +9,13 @@ left join person p on p.PARTY_ID =or2.PARTY_ID
 join order_contact_mech ocm on ocm.ORDER_ID = oh.ORDER_ID and ocm.CONTACT_MECH_PURPOSE_TYPE_ID = 'SHIPPING_LOCATION'
 left join postal_address pa on pa.CONTACT_MECH_ID = ocm.CONTACT_MECH_ID
 where oh.ORDER_DATE between '2023-10-01' and '2023-10-31'
+
+
+
+-- EXPLANATION (APPROACH)
+-- The approach involves querying tables such as order_header for order details, order_role to connect each order with the customer 
+--(identified as BILL_TO_CUSTOMER), and party_group or person for customer names, depending on whether the customer is a group or individual. 
+--The query also joins with the order_contact_mech table to identify shipping locations and the postal_address table to extract address details
+--like street, city, state, postal code, and country. Filtering is applied to select orders within the specified date range and exclude canceled orders. 
+--Using COALESCE, the query ensures proper retrieval of customer names and returns all relevant fields, including ORDER_ID, customer details, address,
+--ORDER_STATUS, and ORDER_DATE, providing a comprehensive view of shipping addresses for customer service to verify
