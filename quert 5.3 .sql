@@ -1,3 +1,16 @@
+
+-- 5.3 Top-Selling Product in New York
+-- Business Problem:
+-- Merchandising teams need to identify the best-selling product(s) in a specific region (New York) for targeted restocking or promotions.
+
+-- Fields to Retrieve:
+
+-- PRODUCT_ID
+-- INTERNAL_NAME
+-- TOTAL_QUANTITY_SOLD
+-- CITY / STATE (within New York region)
+-- REVENUE (optionally, total sales amount)
+
 select
 	p.PRODUCT_ID ,
 	p.INTERNAL_NAME,
