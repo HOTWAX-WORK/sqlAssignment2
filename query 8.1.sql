@@ -1,3 +1,18 @@
+8. Inventory Management & Transfers
+8.1 Lost and Damaged Inventory
+Business Problem:
+Warehouse managers need to track “shrinkage” such as lost or damaged inventory to reconcile physical vs. system counts.
+
+Fields to Retrieve:
+
+INVENTORY_ITEM_ID
+PRODUCT_ID
+FACILITY_ID
+QUANTITY_LOST_OR_DAMAGED
+REASON_CODE (Lost, Damaged, Expired, etc.)
+TRANSACTION_DATE
+
+
 select
 	ii.PRODUCT_ID ,
 	ii.INVENTORY_ITEM_ID ,
