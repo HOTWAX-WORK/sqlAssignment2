@@ -45,3 +45,9 @@ where
 group by
     oh.order_id
 ;
+
+-- EXPLANATION
+-- It starts with order_header to get order-related information and links it to order_role to filter only customer orders.
+-- The person table is joined to retrieve customer names, while address details are obtained through order_contact_mech, contact_mech, and postal_address.
+-- A filter on STATE_PROVINCE_GEO_ID = 'NY' ensures only New York orders are selected.
+-- Finally, GROUP BY oh.ORDER_ID prevents duplicate entries and ensures each order appears once.
