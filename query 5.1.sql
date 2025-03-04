@@ -1,3 +1,23 @@
+-- Mixed Party + Order Queries
+-- 5.1 Shipping Addresses for October 2023 Orders
+-- Business Problem:
+-- Customer Service might need to verify addresses for orders placed or completed in October 2023. This helps ensure shipments are delivered correctly and prevents address-related issues.
+
+-- Fields to Retrieve:
+
+-- ORDER_ID
+-- PARTY_ID (Customer ID)
+-- CUSTOMER_NAME (or FIRST_NAME / LAST_NAME)
+-- STREET_ADDRESS
+-- CITY
+-- STATE_PROVINCE
+-- POSTAL_CODE
+-- COUNTRY_CODE
+-- ORDER_STATUS
+-- ORDER_DATE
+
+
+
 select oh.ORDER_ID ,COALESCE(pG.PARTY_ID, p.PARTY_ID) AS PARTY_ID,COALESCE(pg.GROUP_NAME, p.FIRST_NAME) AS CUSTOMER_NAME_FIRST_NAME,p.LAST_NAME
 ,pa.ADDRESS1 as STREET_ADDRESS,pa.CITY ,pa.STATE_PROVINCE_GEO_ID as STATE_PROVINCE,pa.POSTAL_CODE ,
 pa.COUNTRY_GEO_ID as COUNTRY_CODE
