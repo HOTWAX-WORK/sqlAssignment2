@@ -57,6 +57,14 @@ having
 )
 
 
+-- EXPLANATION
+-- The query starts with the order_item table because it contains details about products sold, including PRODUCT_ID, QUANTITY, and UNIT_PRICE.Next, 
+-- order_contact_mech is joined to link orders to their shipping addresses.The postal_address table is then joined to retrieve location details such 
+-- as CITY and STATE_PROVINCE_GEO_ID. The query filters for STATE_PROVINCE_GEO_ID = 'NY' to ensure that only orders from New York are considered. 
+-- The product table is also joined to obtain product-related details, specifically PRODUCT_ID and INTERNAL_NAME. Aggregations are performed to 
+-- compute TOTAL_QUANTITY_SOLD and REVENUE. A subquery determines the maximum quantity sold in each city, and the HAVING clause ensures only the 
+-- top-selling product per city is returned.
+
 ---------------------------------------------------------------------------------------------------------------------
 
 
